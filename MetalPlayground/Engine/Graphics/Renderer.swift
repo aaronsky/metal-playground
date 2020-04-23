@@ -46,7 +46,7 @@ class Renderer: NSObject {
         pipeline.swapBuffers(encoder)
         
         encoder.setDepthStencilState(pipeline.depthState)
-        encoder.setFrontFacing(.counterClockwise)
+        encoder.setFrontFacing(.clockwise)
         encoder.setCullMode(.back)
         encoder.setTriangleFillMode(.fill)
         
