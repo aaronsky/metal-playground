@@ -1,15 +1,10 @@
-/*
- See LICENSE folder for this sample’s licensing information.
- 
- Abstract:
- Metal shaders used for this sample
- */
 
 #include <metal_stdlib>
 
 using namespace metal;
 
-#import "BasicShader.h"
+#include <simd/simd.h>
+#include "../ShaderTypes.h"
 
 struct Vertex
 {
@@ -35,6 +30,7 @@ vertex ColorInOut basicVertex(Vertex in [[stage_in]],
 {
     
     ColorInOut out;
+    
     out.position = frameUniforms.viewProjectionMatrix * meshUniforms.modelMatrix * float4(in.position, 1.0);
     out.worldPosition = (meshUniforms.modelMatrix * float4(in.position, 1.0)).xyz;
     out.normal = meshUniforms.normalMatrix * in.normal;

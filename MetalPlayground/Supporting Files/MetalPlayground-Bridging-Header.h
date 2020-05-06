@@ -9,6 +9,5 @@
 #define MetalPlayground_Bridging_Header_h
 
 #import "ShaderTypes.h"
-#import "BasicShader.h"
 
 #endif /* MetalPlayground_Bridging_Header_h */

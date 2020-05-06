@@ -8,22 +8,6 @@
 import Foundation
 
 class Transform {
-    struct Rotation {
-        var angle: Float {
-            didSet {
-                if angle > 360 {
-                    angle = 0
-                }
-            }
-        }
-        var axis: SIMD3<Float>
-        
-        init(angle: Float = 0, axis: SIMD3<Float> = [0, 0, 0]) {
-            self.angle = angle
-            self.axis = axis
-        }
-    }
-    
     private var isDirty = true
     var position: SIMD3<Float> {
         didSet {
@@ -41,17 +25,17 @@ class Transform {
         }
     }
     
-    private var modelMatrix: matrix_float4x4 = .identity
-    var model: matrix_float4x4 {
+    private var _modelMatrix: matrix_float4x4 = .identity
+    var modelMatrix: matrix_float4x4 {
         if isDirty {
-            modelMatrix = matrix_float4x4
+            _modelMatrix = matrix_float4x4
                 .identity
                 .scaled(with: scale)
                 .rotatedBy(rotation)
                 .translated(with: position)
             isDirty = false
         }
-        return modelMatrix
+        return _modelMatrix
     }
     
     init(position: SIMD3<Float> = .zero, rotation: Rotation = Rotation(), scale: SIMD3<Float> = .one) {
@@ -76,6 +60,22 @@ class Transform {
     func scale(by scalar: SIMD3<Float>) {
         scale += scalar
     }
+    
+    struct Rotation {
+        var angle: Float {
+            didSet {
+                if angle > 360 {
+                    angle = 0
+                }
+            }
+        }
+        var axis: SIMD3<Float>
+        
+        init(angle: Float = 0, axis: SIMD3<Float> = [0, 0, 0]) {
+            self.angle = angle
+            self.axis = axis
+        }
+    }
 }
 
 private extension matrix_float4x4 {
@@ -85,5 +85,9 @@ private extension matrix_float4x4 {
     
     func rotatedBy(_ rotation: Transform.Rotation) -> Self {
         rotatedBy(rotation.angle.degreesToRadians, axis: rotation.axis)
+    }
+    
+    func modelMatrix(world: matrix_float4x4) -> matrix_float4x4 {
+        world
     }
 }
